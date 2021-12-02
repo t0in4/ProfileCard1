@@ -8,6 +8,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -34,17 +36,30 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen() {
-  /*  Scaffold(topBar = AppBar()) {
+    //adding Scaffold - start
+    //Scaffold "topBar: @Composable () -> Unit = {}" need composable so wrap function in curly brackets
+    //else it will be stroke by red warning
+    Scaffold(topBar = { AppBar() }) {
+        Surface(modifier = Modifier
+            .fillMaxSize(),
+            //color = Color.LightGray) changed color in Theme.kt
+        )
+        {
+            ProfileCard()
+        }
+    }
 
-    }*/
-   Surface(modifier = Modifier
-       .fillMaxSize(),
-       //color = Color.LightGray) changed color in Theme.kt
-   )
-       {
-ProfileCard()
-   }
 }
+
+@Composable
+fun AppBar() {
+    TopAppBar(
+        navigationIcon = { Icon(Icons.Default.Home,
+        "content description") },
+        title = { Text("Messaging Application Users") }
+    )
+}
+//adding Scaffold - end
 
 @Composable
 fun ProfileCard() {
