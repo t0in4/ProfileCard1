@@ -129,7 +129,7 @@ fun ProfileContent(userName: String, onlineStatus: Boolean) {
         .padding(8.dp)
         .fillMaxWidth()) {
         CompositionLocalProvider(LocalContentAlpha provides (
-                if (onlineStatus) ContentAlpha.disabled
+                if (onlineStatus) 1f
                 else ContentAlpha.medium))  {
             Text(userName, style = MaterialTheme.typography.h5)
         }
