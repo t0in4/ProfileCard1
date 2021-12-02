@@ -55,8 +55,9 @@ fun MainScreen() {
 fun AppBar() {
     TopAppBar(
         navigationIcon = { Icon(Icons.Default.Home,
-        "content description") },
-        title = { Text("Messaging Application Users") }
+        "content description", Modifier.padding(horizontal = 12.dp)) },
+        title = { Text("Messaging Application Users") },
+
     )
 }
 //adding Scaffold - end
