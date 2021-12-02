@@ -45,7 +45,12 @@ fun MainScreen() {
             //color = Color.LightGray) changed color in Theme.kt
         )
         {
-            ProfileCard()
+            //adding Column to add more ProfileCard
+            Column() {
+                ProfileCard()
+                ProfileCard()
+            }
+
         }
     }
 
@@ -65,7 +70,8 @@ fun AppBar() {
 @Composable
 fun ProfileCard() {
     Card(modifier = Modifier
-        .padding(16.dp)
+            //changing padding
+        .padding(top = 8.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)
         .fillMaxWidth()
         .wrapContentHeight(align = Alignment.Top),
     elevation = 8.dp,
