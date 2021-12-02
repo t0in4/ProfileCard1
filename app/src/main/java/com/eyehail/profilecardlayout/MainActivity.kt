@@ -35,7 +35,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen() {
+// added to MainScreen userProfiles: List<UserProfile> = userProfileList as
+//default parameter, so MainActivity doesnt need non empty constructor
+fun MainScreen(userProfiles: List<UserProfile> = userProfileList) {
     //adding Scaffold - start
     //Scaffold "topBar: @Composable () -> Unit = {}" need composable so wrap function in curly brackets
     //else it will be stroke by red warning
@@ -45,10 +47,13 @@ fun MainScreen() {
             //color = Color.LightGray) changed color in Theme.kt
         )
         {
+
             //adding Column to add more ProfileCard
             Column() {
-                ProfileCard(userProfileList[0])
-                ProfileCard(userProfileList[1])
+                for (userProfile in userProfiles) {
+                    ProfileCard(userProfile = userProfile)
+
+                }
             }
 
         }
@@ -70,7 +75,7 @@ fun AppBar() {
 @Composable
 fun ProfileCard(userProfile: UserProfile) {
     Card(modifier = Modifier
-            //changing padding
+        //changing padding
         .padding(top = 8.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)
         .fillMaxWidth()
         .wrapContentHeight(align = Alignment.Top),
@@ -123,7 +128,12 @@ fun ProfileContent(userName: String, onlineStatus: Boolean) {
     Column(modifier = Modifier
         .padding(8.dp)
         .fillMaxWidth()) {
-        Text(userName, style = MaterialTheme.typography.h5)
+        CompositionLocalProvider(LocalContentAlpha provides (
+                if (onlineStatus) ContentAlpha.disabled
+                else ContentAlpha.medium))  {
+            Text(userName, style = MaterialTheme.typography.h5)
+        }
+
         // making text a little transparent
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(if (onlineStatus)"Active now" else "Offline", style = MaterialTheme.typography.body2)
