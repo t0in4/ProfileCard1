@@ -8,4 +8,13 @@ val userProfileList = arrayListOf<UserProfile>(
     UserProfile(name = "John Doe", status = true, R.drawable.dragon),
 
     UserProfile(name = "Anna Right", status = false, R.drawable.fox),
+    UserProfile(name = "John Doe", status = true, R.drawable.dragon),
+
+    UserProfile(name = "Anna Right", status = false, R.drawable.fox),
+    UserProfile(name = "John Doe", status = true, R.drawable.dragon),
+
+    UserProfile(name = "Anna Right", status = false, R.drawable.fox),
+    UserProfile(name = "John Doe", status = true, R.drawable.dragon),
+
+    UserProfile(name = "Anna Right", status = false, R.drawable.fox),
 )
