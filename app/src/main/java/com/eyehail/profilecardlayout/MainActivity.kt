@@ -19,10 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.transform.CircleCropTransformation
 import com.eyehail.profilecardlayout.ui.theme.MyTheme
 import com.eyehail.profilecardlayout.ui.theme.lightGreen
+import com.google.accompanist.coil.rememberCoilPainter
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,20 +52,13 @@ fun MainScreen(userProfiles: List<UserProfile> = userProfileList) {
             //color = Color.LightGray) changed color in Theme.kt
         )
         {
-
             //adding LazyColumn
             LazyColumn {
                 items(userProfiles) { userProfile ->
                     ProfileCard(userProfile = userProfile)
                 }
             }
-
-
-
-
-
             }
-
         }
 }
 
@@ -74,7 +70,6 @@ fun AppBar() {
         navigationIcon = { Icon(Icons.Default.Home,
         "content description", Modifier.padding(horizontal = 12.dp)) },
         title = { Text("Messaging Application Users") },
-
     )
 }
 //adding Scaffold - end
@@ -119,12 +114,22 @@ fun ProfilePicture(drawableId: Int, onlineStatus: Boolean) {
     // also have to change background here as above bcz Card inherit color from Theme.kt
     backgroundColor = Color.White
     ) {
-        Image(
+       /* Image(
             //replaced R.drawable.id by drawableId
             painter = painterResource(id = drawableId),
             contentDescription = "Content Description",
             modifier = Modifier.size(72.dp),
             contentScale = ContentScale.Crop
+        )*/
+        Image(
+            //painter = rememberCoilPainter("https://picsum.photos/300/300"),
+            //contentDescription = stringResource(R.string.image_content_desc)
+            painter = rememberCoilPainter(request = drawableId,
+                    requestBuilder = {
+                transformations(CircleCropTransformation())
+            },),
+            modifier = Modifier.size(72.dp),
+        contentDescription = "Profile content description"
         )
     }
 
