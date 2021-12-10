@@ -12,12 +12,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -57,7 +60,7 @@ fun UsersApplication(userProfiles: List<UserProfile> = userProfileList) {
         arguments = listOf(navArgument("userId") {
             type = NavType.IntType
         })) {navBackStackEntry ->
-            UserProfileDetailsScreen(navBackStackEntry.arguments!!.getInt("userId"))
+            UserProfileDetailsScreen(navBackStackEntry.arguments!!.getInt("userId"), navController)
         }
     }
 }
@@ -69,7 +72,9 @@ fun UserListScreen(userProfiles: List<UserProfile>, navController: NavHostContro
     //adding Scaffold - start
     //Scaffold "topBar: @Composable () -> Unit = {}" need composable so wrap function in curly brackets
     //else it will be stroke by red warning
-    Scaffold(topBar = { AppBar() }) {
+    Scaffold(topBar = { AppBar(
+        title = "Users list",
+    icon = Icons.Default.Home) { /* blank lambda - no action run*/ } } ) {
         Surface(modifier = Modifier
             .fillMaxSize(),
             //color = Color.LightGray) changed color in Theme.kt
@@ -90,12 +95,22 @@ fun UserListScreen(userProfiles: List<UserProfile>, navController: NavHostContro
 
 
 @Composable
-fun AppBar() {
+// iconClickAction: () -> Unit is a lambda
+fun AppBar(title: String, icon: ImageVector, iconClickAction: () -> Unit) {
     TopAppBar(
-        navigationIcon = { Icon(Icons.Default.Home,
-        "content description", Modifier.padding(horizontal = 12.dp)) },
-        title = { Text("Messaging Application Users") },
+        navigationIcon = { Icon(imageVector = icon,
+            contentDescription = "",
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
+                .clickable(
+                    onClick = {
+                        iconClickAction.invoke()
+                    }
+                ))
+         },
+        title = { Text(title) }
     )
+
 }
 //adding Scaffold - end
 
@@ -181,9 +196,15 @@ fun ProfileContent(userName: String, onlineStatus: Boolean, alignment: Alignment
 
 @Composable
 
-fun UserProfileDetailsScreen(userId: Int) {
+fun UserProfileDetailsScreen(userId: Int, navController: NavHostController?) {
 val userProfile = userProfileList.first { userProfile -> userId == userProfile.id }
-    Scaffold(topBar = { AppBar() }) {
+    Scaffold(topBar = { AppBar( title = "User profile details",
+    icon = Icons.Default.ArrowBack) {
+        // lambda action when click on ArrowBack
+        navController?.navigateUp()
+        //navController?.navigate("users_list")
+
+    } }) {
         Surface(modifier = Modifier
             .fillMaxSize(),
         )
@@ -203,7 +224,7 @@ val userProfile = userProfileList.first { userProfile -> userId == userProfile.i
 @Composable
 fun UserProfileDetailsPreview() {
     MyTheme() {
-        UserProfileDetailsScreen(userId = 0)
+        UserProfileDetailsScreen(userId = 0, null)
     }
 }
 
