@@ -21,10 +21,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.transform.CircleCropTransformation
 import com.eyehail.profilecardlayout.ui.theme.MyTheme
 import com.eyehail.profilecardlayout.ui.theme.lightGreen
@@ -49,8 +52,12 @@ fun UsersApplication(userProfiles: List<UserProfile> = userProfileList) {
         composable("users_list") {
             UserListScreen(userProfiles, navController)
         }
-        composable("user_details") {
-            UserProfileDetailsPreview()
+        // adding id for identifying userprofile
+        composable(route = "user_details/{userId}",
+        arguments = listOf(navArgument("userId") {
+            type = NavType.IntType
+        })) {navBackStackEntry ->
+            UserProfileDetailsScreen(navBackStackEntry.arguments!!.getInt("userId"))
         }
     }
 }
@@ -72,7 +79,7 @@ fun UserListScreen(userProfiles: List<UserProfile>, navController: NavHostContro
             LazyColumn {
                 items(userProfiles) { userProfile ->
                     ProfileCard(userProfile = userProfile) {
-                        navController?.navigate("user_details") // find navigate wiht route option
+                        navController?.navigate("user_details/${userProfile.id}") // find navigate wiht route option
                     }
                 }
             }
@@ -174,8 +181,8 @@ fun ProfileContent(userName: String, onlineStatus: Boolean, alignment: Alignment
 
 @Composable
 
-fun UserProfileDetailsScreen(userProfile: UserProfile = userProfileList[0]) {
-
+fun UserProfileDetailsScreen(userId: Int) {
+val userProfile = userProfileList.first { userProfile -> userId == userProfile.id }
     Scaffold(topBar = { AppBar() }) {
         Surface(modifier = Modifier
             .fillMaxSize(),
@@ -196,7 +203,7 @@ fun UserProfileDetailsScreen(userProfile: UserProfile = userProfileList[0]) {
 @Composable
 fun UserProfileDetailsPreview() {
     MyTheme() {
-        UserProfileDetailsScreen()
+        UserProfileDetailsScreen(userId = 0)
     }
 }
 
